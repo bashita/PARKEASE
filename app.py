@@ -132,13 +132,18 @@ def evaluate_parking_gate(vehicle_type, slot_type, slot_vehicle_type, supports_b
 # =========================
 
 def get_db_connection():
-    return pymysql.connect(
-        host="localhost",
-        user="root",
-        password="mysql",
-        database="mall_parking",
-        cursorclass=pymysql.cursors.DictCursor
-    )
+    connection_options = {
+        "host": "mysql-21f047be-arslogamithra-ded6.l.aivencloud.com",
+        "port": 12429,
+        "user": "avnadmin",
+        "password": "AVNS_iOgqZAwxlbihn9ceFcE",
+        "database": "defaultdb",
+        "cursorclass": pymysql.cursors.DictCursor,
+    }
+    ssl_ca = os.environ.get("DB_SSL_CA")
+    if ssl_ca:
+        connection_options["ssl"] = {"ca": ssl_ca}
+    return pymysql.connect(**connection_options)
 
 
 # =========================
