@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Mall Parking</title>
+    <style>
+        :root {
+ --background: oklch(0.973 0.003 120); --foreground: oklch(0.215 0.006 180);
+ --card: oklch(1 0 0); --card-foreground: var(--foreground); --popover: var(--card); --popover-foreground: var(--foreground);
+ --primary: oklch(0.925 0.183 119); --primary-foreground: var(--foreground);
+ --secondary: oklch(0.26 0.007 180); --secondary-foreground: oklch(1 0 0);
+ --muted: oklch(0.942 0.005 120); --muted-foreground: oklch(0.53 0.013 180);
+ --accent: oklch(0.95 0.07 119); --accent-foreground: var(--foreground);
+ --border: oklch(0.885 0.006 180); --input: var(--border); --ring: var(--primary);
+ --destructive: oklch(0.57 0.2 25); --destructive-foreground: oklch(1 0 0);
+ --sidebar: oklch(0.215 0.006 180); --sidebar-foreground: oklch(0.97 0 0); --sidebar-muted: oklch(0.67 0.008 180);
+ --available: oklch(0.925 0.183 119); --reserved: oklch(0.87 0.055 235); --occupied: oklch(0.88 0.055 30); --accessible: oklch(0.87 0.06 310);
+ --hero-shade: linear-gradient(90deg, oklch(0.14 0.005 180 / 94%), oklch(0.14 0.005 180 / 65%) 46%, oklch(0.14 0.005 180 / 5%));
+ --font-body: 'DM Sans', sans-serif; --font-heading: 'Space Grotesk', sans-serif; --radius: 0.5rem;
+}
+* {box-sizing:border-box} body {margin:0;font-family:var(--font-body);background:var(--background);color:var(--foreground);font-size:14px;letter-spacing:0}
+h1,h2,h3,.brand,.stat-value {font-family:var(--font-heading);letter-spacing:0} a {color:inherit;text-decoration:none} button,input,select {font:inherit} button,a,input,select { -webkit-tap-highlight-color:transparent } button,a {transition:background .18s, transform .18s} a:focus-visible,button:focus-visible {outline:3px solid var(--ring);outline-offset:4px} button {cursor:pointer} svg {flex-shrink:0}
+.app-shell {min-height:100vh;display:grid;grid-template-columns:238px minmax(0,1fr)}
+.side-panel {background:var(--sidebar);color:var(--sidebar-foreground);padding:34px 22px;display:flex;flex-direction:column;position:fixed;width:238px;inset:0 auto 0 0;z-index:10}
+.brand {display:flex;align-items:center;gap:11px;font-size:21px;font-weight:700}.brand-symbol {display:grid;place-items:center;width:36px;height:36px;border-radius:7px;background:var(--primary);color:var(--primary-foreground);font-size:25px;font-weight:700}.brand-dot {color:var(--primary)}
+.nav-label {font-size:10px;color:var(--sidebar-muted);letter-spacing:1.7px;text-transform:uppercase;margin:54px 12px 16px}.side-nav {display:grid;gap:7px}.side-nav a {display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:5px;font-size:13px;color:var(--sidebar-muted)}.side-nav a.active {background:var(--primary);color:var(--primary-foreground);font-weight:600}.side-nav a:not(.active):hover {background:var(--secondary);color:var(--secondary-foreground)}.side-nav svg {width:18px;height:18px}.side-bottom {margin-top:auto;padding:30px 12px 0}.side-bottom p {color:var(--sidebar-muted);font-size:12px;line-height:1.7}.side-bottom .mini-rule {width:30px;height:3px;background:var(--primary);margin-bottom:16px}
+.workspace {grid-column:2;min-width:0}.topbar {height:83px;display:flex;align-items:center;justify-content:space-between;padding:0 46px;border-bottom:1px solid var(--border);background:var(--card)}.breadcrumb {display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted-foreground)}.breadcrumb strong {color:var(--foreground);font-weight:500}.top-actions {display:flex;align-items:center;gap:20px}.live-dot {display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--muted-foreground)}.live-dot i {width:6px;height:6px;background:var(--primary);border-radius:50%}.avatar {width:33px;height:33px;display:grid;place-items:center;border:1px solid var(--border);border-radius:50%;font-size:11px;font-weight:600}
+.home-content {max-width:1380px;margin:auto;padding:39px 46px 26px}.page-heading {display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:27px;gap:20px}.eyebrow {font-size:10px;text-transform:uppercase;letter-spacing:1.8px;font-weight:600;color:var(--muted-foreground);margin:0 0 11px}.page-heading h1 {font-size:31px;line-height:1.25;font-weight:600;margin:0}.page-heading p:not(.eyebrow) {color:var(--muted-foreground);font-size:13px;margin:10px 0 0}.small-tag {font-size:10px;letter-spacing:1px;display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid var(--border);border-radius:4px;white-space:nowrap}
+.parking-banner {position:relative;isolation:isolate;min-height:270px;overflow:hidden;border-radius:7px;background:var(--sidebar);color:var(--sidebar-foreground);display:flex;align-items:center;padding:35px 36px}.parking-banner>img {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}.parking-banner:after {content:'';position:absolute;inset:0;background:var(--hero-shade);z-index:-1}.banner-copy {max-width:440px}.banner-copy .eyebrow {color:var(--primary)}.banner-copy h2 {font-size:38px;font-weight:500;line-height:1.13;margin:14px 0}.banner-copy p {font-size:13px;line-height:1.7;max-width:285px;color:var(--sidebar-foreground)}.banner-bottom {display:flex;gap:19px;margin-top:25px;font-size:10px;color:var(--sidebar-foreground)}.banner-bottom span {display:flex;align-items:center;gap:5px}.banner-bottom svg {width:13px;height:13px;color:var(--primary)}.banner-number {position:absolute;right:26px;bottom:24px;font-size:10px;letter-spacing:2px}
+.section-heading {display:flex;justify-content:space-between;align-items:center;margin:32px 0 17px}.section-heading h2 {font-size:19px;margin:0;font-weight:600}.section-heading span {font-size:11px;color:var(--muted-foreground)}.role-grid {display:grid;grid-template-columns:1fr 1fr;gap:20px}.role-card {background:var(--card);border:1px solid var(--border);border-radius:7px;padding:25px;position:relative}.role-icon {background:var(--accent);color:var(--foreground);width:45px;height:45px;display:grid;place-items:center;border-radius:7px;margin-bottom:23px}.role-card.staff .role-icon {background:var(--muted)}.role-card .role-count {position:absolute;right:25px;top:28px;color:var(--muted-foreground);font-size:11px}.role-card h3 {font-size:21px;margin:0 0 8px;font-weight:600}.role-card p {color:var(--muted-foreground);font-size:12px;line-height:1.7;margin:0;max-width:300px}.role-benefits {display:flex;gap:16px;flex-wrap:wrap;margin:22px 0;font-size:10px;color:var(--muted-foreground)}.role-benefits span {display:flex;gap:5px;align-items:center}.role-benefits svg {width:12px;height:12px}.role-link {width:100%;display:flex;justify-content:space-between;align-items:center;padding:13px 15px;border-radius:4px;background:var(--primary);color:var(--primary-foreground);font-size:12px;font-weight:600;border:1px solid var(--primary)}.role-link.secondary {background:var(--card);border-color:var(--border)}.role-link:hover {background:var(--accent)}.role-link svg {width:16px;height:16px}
+.home-footer {display:flex;justify-content:space-between;gap:15px;margin-top:32px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted-foreground);font-size:10px}.footer-links {display:flex;gap:20px}.footer-links a:hover {color:var(--foreground)}
+/* Supplied application pages */
+.template-page {display:block;padding-left:238px;min-height:100vh}.template-page>.side-panel {display:flex}.template-page header {padding:29px 38px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--border);background:var(--card)}.template-page header h1 {font-size:25px;margin:0 0 7px}.template-page header p {color:var(--muted-foreground);margin:0;font-size:12px}.template-page header a,.navbar a {font-size:12px;padding:10px 14px;border:1px solid var(--border);border-radius:4px}.template-page main {max-width:1500px;width:100%;padding:32px 38px;margin:0 auto}.template-page section {padding:0 0 30px;margin:0 0 30px;border-bottom:1px solid var(--border);min-width:0}.template-page section h2 {font-size:21px;margin:0 0 20px}.template-page .grid {display:grid;grid-template-columns:1fr;gap:24px}.template-page table {width:100%;border-collapse:collapse;font-size:12px;display:block;overflow-x:auto}.template-page th,.template-page td {padding:15px 13px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}.template-page th {font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted-foreground);background:var(--muted)}.template-page td {background:var(--card)}.template-page input,.template-page select {padding:12px 13px;border:1px solid var(--input);border-radius:4px;background:var(--card);color:var(--foreground);min-width:0;max-width:100%}.template-page input:focus,.template-page select:focus {outline:2px solid var(--primary);outline-offset:1px}.template-page input[type=checkbox] {width:16px;accent-color:var(--primary)}.template-page button {padding:12px 17px;background:var(--primary);color:var(--primary-foreground);border:0;border-radius:4px;font-weight:600}.template-page button:hover {filter:brightness(.95)}.template-page button:disabled {opacity:.55;cursor:not-allowed}.template-page button.delete {background:var(--occupied);color:var(--destructive)}.template-page label {font-size:12px;font-weight:600}.template-page .empty,.field-help {color:var(--muted-foreground);font-size:12px;line-height:1.6}.template-page .parking-map {display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:13px;padding:24px;background:var(--muted);border-radius:6px;margin:23px 0}.template-page .slot,.template-page .parking-slot {min-height:105px;display:flex;align-items:center;justify-content:center;flex-direction:column;border:1px solid var(--border);border-radius:5px;font-family:var(--font-heading);font-size:18px;color:var(--foreground)}.template-page .slot small,.template-page .parking-slot small {font-family:var(--font-body);font-size:10px;margin-top:9px;font-weight:400;text-align:center}.available {background:var(--available)!important}.reserved {background:var(--reserved)!important}.occupied {background:var(--occupied)!important}.disabled-slot,.accessible-dot {background:var(--accessible)!important}.maintenance,.unavailable {background:var(--secondary)!important;color:var(--secondary-foreground)!important}.slot.selected {outline:3px solid var(--foreground);outline-offset:3px}.legend {display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--muted-foreground)}.legend span {display:flex;align-items:center;gap:6px}.legend i {width:9px;height:9px;border-radius:2px}.template-page #reservationForm {display:grid;gap:10px;max-width:540px}.template-page #reservationForm input,.template-page #reservationForm select {width:100%;margin-bottom:8px}.template-page #proofField,.template-page #receipt {display:none}.template-page #receipt {padding:30px;text-align:center;background:var(--accent)}#qrcode {display:inline-block;background:var(--card);padding:15px}.success {color:var(--foreground)}.slot-form {display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.slot-action {display:flex;gap:8px}.stats-grid {display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.stat-card {background:var(--card);border:1px solid var(--border);border-radius:5px;padding:20px}.stat-label {font-size:11px;color:var(--muted-foreground)}.stat-value {display:block;font-size:32px;margin-top:15px}.available-stat {border-top:3px solid var(--available)}.occupied-stat {border-top:3px solid var(--occupied)}.reserved-stat {border-top:3px solid var(--reserved)}.disabled-stat {border-top:3px solid var(--accessible)}.slot-status {padding:13px 16px;background:var(--accent);font-size:12px;border-left:3px solid var(--primary)}
+.template-page.auth-page {display:flex;align-items:center;justify-content:center;padding-top:60px;padding-bottom:60px}.login-container,.auth-page .container {width:min(470px,calc(100% - 48px));margin:auto;background:none;padding:0;box-shadow:none}.auth-page h1,.auth-page h2 {font-size:32px;text-align:left;margin:15px 0 10px}.auth-page .subtitle {color:var(--muted-foreground);line-height:1.6;margin-bottom:28px}.auth-page form {margin-top:28px}.auth-page label {display:block;margin:17px 0 8px}.auth-page input,.auth-page select {width:100%}.auth-page button {width:100%;margin-top:26px;padding:15px}.auth-page .link,.register-link,.login-link {font-size:12px;color:var(--muted-foreground);margin-top:23px}.auth-page .link a,.register-link a,.login-link a {color:var(--foreground);font-weight:600}.auth-page .back {display:block;font-size:12px;margin-top:28px;color:var(--muted-foreground)}#message {font-size:12px;color:var(--destructive);margin-top:16px;line-height:1.6}.preview-note {position:fixed;bottom:12px;right:16px;padding:8px 13px;background:var(--secondary);color:var(--secondary-foreground);border-radius:4px;font-size:10px;z-index:30}.role-selection {max-width:900px;margin:auto;padding:60px 38px}.role-selection>h1 {font-size:34px}.role-selection>p {color:var(--muted-foreground);margin-bottom:35px}.navbar {display:flex;gap:8px;flex-wrap:wrap}
+@media(min-width:1450px){.home-content{padding-top:50px}.parking-banner{min-height:310px}.role-card{padding:30px}}
+@media(max-width:1000px){.app-shell{grid-template-columns:195px minmax(0,1fr)}.side-panel{width:195px;padding:28px 15px}.template-page{padding-left:195px}.topbar{padding:0 28px}.home-content{padding:30px 28px}.role-card{padding:20px}.page-heading h1{font-size:27px}.banner-copy h2{font-size:33px}.role-benefits{gap:10px}}
+@media(max-width:760px){.app-shell{display:block}.side-panel{position:relative;width:100%;padding:16px 20px;flex-direction:row;align-items:center;justify-content:space-between;gap:20px}.nav-label,.side-bottom{display:none}.side-nav{display:flex;gap:5px}.side-nav a{padding:10px;font-size:11px}.side-nav a:not(.active){display:none}.brand{font-size:18px}.brand-symbol{width:30px;height:30px;font-size:21px}.workspace{width:100%}.topbar{height:56px;padding:0 20px}.top-actions{gap:12px}.home-content{padding:26px 20px}.page-heading{align-items:flex-start}.page-heading h1{font-size:26px}.small-tag{display:none}.parking-banner{padding:27px 24px;min-height:265px}.banner-copy h2{font-size:32px}.banner-copy{max-width:280px}.banner-number{display:none}.role-grid{grid-template-columns:1fr}.role-card{padding:25px}.section-heading span{font-size:10px}.home-footer{flex-direction:column;gap:14px}.template-page{padding-left:0}.template-page header{padding:24px 20px;align-items:flex-start;flex-direction:column}.template-page main{padding:26px 20px}.template-page.auth-page{display:block;padding-top:0}.auth-page .login-container,.auth-page .container{margin:45px auto}.stats-grid{grid-template-columns:repeat(2,1fr)}.template-page .parking-map{padding:15px;grid-template-columns:repeat(auto-fit,minmax(80px,1fr))}.slot-form{display:flex!important}.slot-form>*{flex:1 1 140px}.template-page .slot-form button{flex:1 1 100%}.role-selection{padding:35px 20px}.role-selection>h1{font-size:28px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.template-frame {display:block;width:100%;height:100dvh;border:0;background:var(--background)}
+.parking-map .available,.legend .available {background:#4caf50!important}
+.parking-map .reserved,.legend .reserved {background:#4285f4!important}
+.parking-map .occupied,.legend .occupied {background:#e53935!important}
+.parking-map .unavailable,.legend .unavailable {background:#111!important}
+.parking-map .disabled-slot,.legend .accessible-dot {background:#ec8ac4!important}
+.parking-map .available,.parking-map .reserved,.parking-map .occupied,.parking-map .unavailable,.parking-map .disabled-slot {color:#fff}
+.parking-map .available {color:#17351b}
+.parking-map .disabled-slot {color:#42243a}
+
+    </style>
+</head>
+<body class="template-page"><aside class="side-panel"><a class="brand" href="/"><span class="brand-symbol">P</span>PARKEASE<span class="brand-dot">.</span></a><div class="nav-label">Your parking, sorted</div><nav class="side-nav"><a href="/admin-dashboard" class="active">↗ &nbsp; Home</a><a href="/admin/add-parking-slot">＋ &nbsp; Add Slot</a><a href="/admin/logout">↪ &nbsp; Logout</a></nav><div class="side-bottom"><div class="mini-rule"></div><strong>A space before you arrive.</strong><p>Malls Slot Parking Reservation</p></div></aside>
+<header>
+    <div>
+        <h1>{{ mall.mall_name }} Admin Dashboard</h1>
+        <p>Manage staff access and parking operations.</p>
+    </div>
+</header>
+<main>
+    <div class="grid">
+        <section>
+            <h2>Staff Accounts</h2>
+            {% if staff_members %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Login ID</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for staff in staff_members %}
+                    <tr>
+                        <td>{{ staff.name }}</td>
+                        <td>{{ staff.email }}</td>
+                        <td>{{ staff.phone }}</td>
+                        <td>{{ staff.login_id }}</td>
+                        <td>
+                            <form method="post" action="/admin/staff/{{ staff.id }}/delete" onsubmit="return confirm('Delete this staff account?');">
+                                <button class="delete" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p class="empty">No staff accounts have been registered for this mall.</p>
+            {% endif %}
+        </section>
+        <section>
+            <h2>Parking Slots</h2>
+            <div class="legend">
+                <span><i class="available"></i>Available</span>
+                <span><i class="accessible-dot"></i>Disabled slot</span>
+                <span><i class="reserved"></i>Reserved</span>
+                <span><i class="occupied"></i>Occupied</span>
+                <span><i class="unavailable"></i>Unavailable</span>
+            </div>
+            {% if parking_slots %}
+            <div class="parking-map">
+                {% for slot in parking_slots %}
+                    <div class="parking-slot {% if slot.status == 'maintenance' %}unavailable{% else %}{{ slot.status }}{% endif %}{% if slot.slot_type == 'disabled' and slot.status == 'available' %} disabled-slot{% endif %}">
+                        <span>{{ slot.slot_number }}</span>
+                        <small>
+                            {{ slot.slot_type|capitalize }} -
+                            {{ slot.vehicle_type|replace('_', ' ')|capitalize }}
+                            {% if slot.supports_big_vehicles %} - Big vehicles okay{% endif %}
+                            - {% if slot.status == 'maintenance' %}Unavailable{% else %}{{ slot.status|capitalize }}{% endif %}
+                        </small>
+                    </div>
+                {% endfor %}
+            </div>
+            {% else %}
+                <p class="empty">No parking slots have been created yet.</p>
+            {% endif %}
+        </section>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Learn how Malls Slot Parking Reservation helps drivers find and reserve mall parking while giving mall teams tools to manage parking.">
+    <title>About - Malls Slot Parking Reservation</title>
+    <style>
+        :root {
+            --background: #f5f6f2;
+            --foreground: #0e0e0e;
+            --muted: #697171;
+            --border: #dedfda;
+            --card: #fff;
+            --sidebar: #0b0b0b;
+            --sidebar-muted: #aeb4b2;
+            --primary: #d7f36c;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--background); color: var(--foreground); font: 14px Arial, sans-serif; line-height: 1.65; }
+        a { color: inherit; text-decoration: none; }
+        .side-panel { position: fixed; inset: 0 auto 0 0; width: 238px; padding: 34px 22px; display: flex; flex-direction: column; background: var(--sidebar); color: #f7f8f6; }
+        .brand { display: flex; align-items: center; gap: 11px; font-size: 21px; font-weight: 700; }
+        .brand-symbol { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 7px; background: var(--primary); color: var(--foreground); font-size: 25px; }
+        .brand-dot { color: var(--primary); }
+        .nav-label { margin: 54px 12px 16px; color: var(--sidebar-muted); font-size: 10px; letter-spacing: 1.7px; text-transform: uppercase; }
+        .side-nav { display: grid; gap: 7px; }
+        .side-nav a { padding: 13px 14px; border-radius: 5px; color: var(--sidebar-muted); font-size: 13px; }
+        .side-nav a:hover { background: #424949; color: #fff; }
+        .side-nav a.active { background: var(--primary); color: var(--foreground); font-weight: 600; }
+        .side-bottom { margin-top: auto; padding: 30px 12px 0; }
+        .side-bottom p { color: var(--sidebar-muted); font-size: 12px; }
+        .mini-rule { width: 30px; height: 3px; margin-bottom: 16px; background: var(--primary); }
+        .page { min-height: 100vh; margin-left: 238px; }
+        header { padding: 48px 38px; background: var(--sidebar); color: #f7f8f6; }
+        header .eyebrow { margin: 0 0 12px; color: var(--primary); font-size: 11px; font-weight: 700; letter-spacing: 1.7px; text-transform: uppercase; }
+        header h1 { max-width: 760px; margin: 0; font-size: clamp(30px, 5vw, 44px); line-height: 1.15; }
+        header p { max-width: 720px; margin: 16px 0 0; color: #d1d6d3; font-size: 15px; }
+        main { max-width: 1150px; margin: auto; padding: 34px 38px 52px; }
+        .section-heading { margin: 0 0 18px; font-size: 22px; line-height: 1.3; }
+        .intro { max-width: 850px; margin-bottom: 32px; }
+        .intro p { margin: 0; color: var(--muted); font-size: 14px; }
+        .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 20px 0 36px; }
+        .card { padding: 22px; border: 1px solid var(--border); border-radius: 7px; background: var(--card); }
+        .card .number { display: grid; place-items: center; width: 34px; height: 34px; margin-bottom: 15px; border-radius: 6px; background: var(--primary); font-weight: 700; }
+        .card h3 { margin: 0 0 8px; font-size: 17px; }
+        .card p { margin: 0; color: var(--muted); font-size: 13px; }
+        .steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 20px 0 36px; }
+        .step { display: flex; gap: 14px; padding: 18px; border: 1px solid var(--border); border-radius: 7px; background: var(--card); }
+        .step-number { flex: 0 0 30px; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--sidebar); color: #fff; font-weight: 700; }
+        .step h3 { margin: 1px 0 5px; font-size: 15px; }
+        .step p { margin: 0; color: var(--muted); font-size: 13px; }
+        .roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
+        .roles .card { border-top: 3px solid var(--primary); }
+        .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+        .button { display: inline-block; padding: 12px 16px; border: 1px solid var(--border); border-radius: 4px; background: var(--card); font-size: 13px; font-weight: 700; }
+        .button.primary { border-color: var(--primary); background: var(--primary); }
+        @media (max-width: 900px) { .feature-grid,.roles { grid-template-columns: 1fr; } }
+        @media (max-width: 760px) {
+            .side-panel { position: static; width: auto; padding: 18px; }
+            .nav-label { margin: 24px 10px 10px; }
+            .side-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .side-bottom { display: none; }
+            .page { margin-left: 0; }
+            header { padding: 34px 20px; }
+            main { padding: 28px 20px 40px; }
+            .steps { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="side-panel">
+        <a class="brand" href="/"><span class="brand-symbol">P</span>PARKEASE<span class="brand-dot">.</span></a>
+        <div class="nav-label">Your parking, sorted</div>
+        <nav class="side-nav" aria-label="Main navigation">
+            <a href="/">↗ &nbsp; Home</a>
+            <a href="/mall.html">▦ &nbsp; Staff &amp; admin</a>
+            <a href="/user-login">▦ &nbsp; User</a>
+            <a href="/about.html" class="active" aria-current="page">ⓘ &nbsp; About</a>
+        </nav>
+        <div class="side-bottom"><div class="mini-rule"></div><strong>A space before you arrive.</strong><p>Malls Slot Parking Reservation</p></div>
+    </aside>
+    <div class="page">
+        <header>
+            <p class="eyebrow">About PARKEASE</p>
+            <h1>Parking plans that start before you reach the mall.</h1>
+            <p>Malls Slot Parking Reservation helps drivers find parking at participating malls and gives mall teams a shared place to manage spaces and arrivals.</p>
+        </header>
+        <main>
+            <section class="intro">
+                <h2 class="section-heading">What the website does</h2>
+                <p>Drivers can browse registered malls, check the parking spaces listed for each location, and reserve an available slot for a chosen date and time. After a successful reservation, the system provides a QR code for the staff to scan at entry. Mall administrators and staff use separate accounts and tools to keep parking information up to date.</p>
+            </section>
+
+            <section>
+                <h2 class="section-heading">A simple flow from search to arrival</h2>
+                <div class="steps">
+                    <article class="step"><span class="step-number">1</span><div><h3>Choose your role</h3><p>Use the user account to book parking, or sign in through staff/admin access to manage a mall.</p></div></article>
+                    <article class="step"><span class="step-number">2</span><div><h3>Find a participating mall</h3><p>Browse available malls and open a location to see its parking slots and compatibility details.</p></div></article>
+                    <article class="step"><span class="step-number">3</span><div><h3>Reserve a suitable slot</h3><p>Select an available space, enter your vehicle and visit details, and submit the reservation.</p></div></article>
+                    <article class="step"><span class="step-number">4</span><div><h3>Show your reservation QR</h3><p>Present the generated QR code when you arrive. Staff scan it to verify the reservation and mark the slot as occupied.</p></div></article>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-heading">Tools for each role</h2>
+                <div class="roles">
+                    <article class="card"><div class="number">U</div><h3>Visitors</h3><p>Create or sign in to a user account, browse malls, reserve parking, view bookings, and present the reservation QR code on arrival.</p></article>
+                    <article class="card"><div class="number">A</div><h3>Mall administrators</h3><p>Manage staff accounts and parking-slot setup, review the slot grid, and update slot availability and status for their mall.</p></article>
+                    <article class="card"><div class="number">S</div><h3>Mall staff</h3><p>View the live parking grid, update a slot when vehicles arrive or leave, and scan reservation QR codes at entry.</p></article>
+                </div>
+            </section>
+
+            <div class="actions">
+                <a class="button primary" href="/user-login">Continue as a visitor</a>
+                <a class="button" href="/mall.html">Staff &amp; admin access</a>
+                <a class="button" href="/">Back to home</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Parking Slot - Mall Parking</title>
+    <style>
+        :root {
+            --background: #f5f6f2;
+            --foreground: #303636;
+            --muted: #697171;
+            --border: #dedfda;
+            --card: #fff;
+            --sidebar: #0f1010;
+            --sidebar-muted: #aeb4b2;
+            --primary: #d7f36c;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--background); color: var(--foreground); font: 14px Arial, sans-serif; }
+        a { color: inherit; text-decoration: none; }
+        .side-panel { position: fixed; inset: 0 auto 0 0; width: 238px; padding: 34px 22px; display: flex; flex-direction: column; background: var(--sidebar); color: #f7f8f6; }
+        .brand { display: flex; align-items: center; gap: 11px; font-size: 21px; font-weight: 700; }
+        .brand-symbol { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 7px; background: var(--primary); color: var(--foreground); font-size: 25px; }
+        .brand-dot { color: var(--primary); }
+        .nav-label { margin: 54px 12px 16px; color: var(--sidebar-muted); font-size: 10px; letter-spacing: 1.7px; text-transform: uppercase; }
+        .side-nav { display: grid; gap: 7px; }
+        .side-nav a { padding: 13px 14px; border-radius: 5px; color: var(--sidebar-muted); font-size: 13px; }
+        .side-nav a:hover { background: #424949; color: #fff; }
+        .side-nav a.active { background: var(--primary); color: var(--foreground); font-weight: 600; }
+        .side-bottom { margin-top: auto; padding: 30px 12px 0; line-height: 1.7; }
+        .side-bottom p { color: var(--sidebar-muted); font-size: 12px; }
+        .mini-rule { width: 30px; height: 3px; margin-bottom: 16px; background: var(--primary); }
+        .page { min-height: 100vh; margin-left: 238px; }
+        header { padding: 29px 38px; border-bottom: 1px solid var(--border); background: var(--card); }
+        header h1 { margin: 0 0 7px; font-size: 25px; }
+        header p { margin: 0; color: var(--muted); font-size: 12px; }
+        main { max-width: 900px; margin: auto; padding: 34px 38px; }
+        .form-card { padding: 26px; border: 1px solid var(--border); border-radius: 7px; background: var(--card); }
+        .form-card h2 { margin: 0 0 8px; font-size: 20px; }
+        .form-card > p { margin: 0 0 24px; color: var(--muted); line-height: 1.6; }
+        .slot-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; gap: 18px; }
+        .field { display: grid; gap: 8px; }
+        label { font-size: 12px; font-weight: 600; }
+        input[type="text"], select { width: 100%; min-width: 0; padding: 12px 13px; border: 1px solid var(--border); border-radius: 4px; background: #fff; color: var(--foreground); font: inherit; }
+        .checkbox-field { display: flex; align-items: center; gap: 9px; min-height: 42px; }
+        .checkbox-field label { font-weight: 400; }
+        input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); }
+        button { padding: 12px 17px; border: 0; border-radius: 4px; background: var(--primary); color: var(--foreground); font: inherit; font-weight: 600; cursor: pointer; }
+        button:hover { filter: brightness(.95); }
+        .actions { display: flex; justify-content: flex-end; grid-column: 1 / -1; }
+        .slots-section { margin-top: 30px; }
+        .slots-section h2 { margin: 0 0 16px; font-size: 20px; }
+        .table-card { overflow-x: auto; border: 1px solid var(--border); border-radius: 7px; background: var(--card); }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 13px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        th { background: #f0f1ed; color: var(--muted); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+        tbody tr:last-child td { border-bottom: 0; }
+        .slot-action { display: flex; align-items: center; gap: 8px; }
+        .slot-action select { padding: 8px; border: 1px solid var(--border); border-radius: 4px; background: #fff; color: var(--foreground); font: inherit; }
+        .slot-action button, .delete-button { padding: 9px 11px; border: 0; border-radius: 4px; background: var(--primary); color: var(--foreground); font: inherit; font-weight: 600; cursor: pointer; }
+        .delete-button { background: #f1d9d5; }
+        .empty { padding: 22px; border: 1px solid var(--border); border-radius: 7px; background: var(--card); color: var(--muted); line-height: 1.6; }
+        @media (max-width: 760px) {
+            .side-panel { position: static; width: auto; padding: 18px; }
+            .nav-label { margin: 24px 10px 10px; }
+            .side-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .side-bottom { display: none; }
+            .page { margin-left: 0; }
+            header { padding: 22px 20px; }
+            main { padding: 25px 20px; }
+        }
+        @media (max-width: 520px) {
+            .slot-form { grid-template-columns: 1fr; }
+            .actions { grid-column: auto; }
+            .actions button { width: 100%; }
+            .slot-action { align-items: stretch; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="side-panel">
+        <a class="brand" href="/"><span class="brand-symbol">P</span>PARKEASE<span class="brand-dot">.</span></a>
+        <div class="nav-label">Your parking, sorted</div>
+        <nav class="side-nav" aria-label="Main navigation">
+            <a href="/admin-dashboard">↗ &nbsp; Home</a>
+            <a href="/admin/add-parking-slot" class="active" aria-current="page">＋ &nbsp; Add Slot</a>
+            <a href="/admin/logout">↪ &nbsp; Logout</a>
+        </nav>
+        <div class="side-bottom"><div class="mini-rule"></div><strong>A space before you arrive.</strong><p>Malls Slot Parking Reservation</p></div>
+    </aside>
+    <div class="page">
+        <header>
+            <h1>Add Parking Slot</h1>
+            <p>{{ mall.mall_name }} · Create and manage parking slots.</p>
+        </header>
+        <main>
+            <section class="form-card">
+                <h2>Slot details</h2>
+                <p>Choose a unique slot number and configure its supported vehicle types.</p>
+                <form class="slot-form" method="post" action="/admin/parking-slots">
+                    <div class="field">
+                        <label for="slotNumber">Slot number</label>
+                        <input id="slotNumber" type="text" name="slotNumber" placeholder="e.g. A-01" required>
+                    </div>
+                    <div class="field">
+                        <label for="slotType">Slot type</label>
+                        <select id="slotType" name="slotType">
+                            <option value="normal">Normal slot</option>
+                            <option value="disabled">Disabled slot</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="slotVehicleType">Vehicle type</label>
+                        <select id="slotVehicleType" name="slotVehicleType">
+                            <option value="all">All vehicles</option>
+                            <option value="two_wheeler">2 wheeler only</option>
+                            <option value="four_wheeler">4 wheeler only</option>
+                        </select>
+                    </div>
+                    <div class="checkbox-field">
+                        <input id="supportsBigVehicles" type="checkbox" name="supportsBigVehicles">
+                        <label for="supportsBigVehicles">Supports big vehicles</label>
+                    </div>
+                    <div class="actions"><button class="primary" type="submit">Add Slot</button></div>
+                </form>
+            </section>
+            <section class="slots-section">
+                <h2>Parking Slots</h2>
+                {% if parking_slots %}
+                <div class="table-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Slot</th>
+                                <th>Type</th>
+                                <th>Vehicle</th>
+                                <th>Big vehicles</th>
+                                <th>Status</th>
+                                <th>Update</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for slot in parking_slots %}
+                            <tr>
+                                <td>{{ slot.slot_number }}</td>
+                                <td>{{ slot.slot_type|capitalize }}</td>
+                                <td>{{ slot.vehicle_type|replace('_', ' ')|capitalize }}</td>
+                                <td>{% if slot.supports_big_vehicles %}Yes{% else %}No{% endif %}</td>
+                                <td>{% if slot.status == 'maintenance' %}Unavailable{% else %}{{ slot.status|capitalize }}{% endif %}</td>
+                                <td>
+                                    <form class="slot-action" method="post" action="/admin/parking-slots/{{ slot.id }}">
+                                        <select name="status" aria-label="Status for slot {{ slot.slot_number }}">
+                                            <option value="available" {% if slot.status == 'available' %}selected{% endif %}>Available</option>
+                                            <option value="reserved" {% if slot.status == 'reserved' %}selected{% endif %}>Reserved</option>
+                                            <option value="occupied" {% if slot.status == 'occupied' %}selected{% endif %}>Occupied</option>
+                                            <option value="unavailable" {% if slot.status == 'maintenance' %}selected{% endif %}>Unavailable</option>
+                                        </select>
+                                        <button type="submit">Save</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method="post" action="/admin/parking-slots/{{ slot.id }}/delete" onsubmit="return confirm('Delete this parking slot?');">
+                                        <button class="delete-button" type="submit">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="empty">No parking slots have been created yet. Add your first slot using the form above.</p>
+                {% endif %}
+            </section>
+        </main>
+    </div>
+</body>
+</html>
