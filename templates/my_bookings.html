@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Bookings - Mall Parking</title>
+    <style>
+        :root {
+            --background: #f5f6f2;
+            --foreground: #303636;
+            --muted: #697171;
+            --border: #dedfda;
+            --card: #fff;
+            --sidebar: #303636;
+            --sidebar-muted: #aeb4b2;
+            --primary: #d7f36c;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--background); color: var(--foreground); font: 14px Arial, sans-serif; }
+        a { color: inherit; text-decoration: none; }
+        .side-panel { position: fixed; inset: 0 auto 0 0; width: 238px; padding: 34px 22px; display: flex; flex-direction: column; background: var(--sidebar); color: #f7f8f6; }
+        .brand { display: flex; align-items: center; gap: 11px; font-size: 21px; font-weight: 700; }
+        .brand-symbol { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 7px; background: var(--primary); color: var(--foreground); font-size: 25px; }
+        .brand-dot { color: var(--primary); }
+        .nav-label { margin: 54px 12px 16px; color: var(--sidebar-muted); font-size: 10px; letter-spacing: 1.7px; text-transform: uppercase; }
+        .side-nav { display: grid; gap: 7px; }
+        .side-nav a { padding: 13px 14px; border-radius: 5px; color: var(--sidebar-muted); font-size: 13px; }
+        .side-nav a:hover { background: #424949; color: #fff; }
+        .side-nav a.active { background: var(--primary); color: var(--foreground); font-weight: 600; }
+        .side-bottom { margin-top: auto; padding: 30px 12px 0; line-height: 1.7; }
+        .side-bottom p { color: var(--sidebar-muted); font-size: 12px; }
+        .mini-rule { width: 30px; height: 3px; margin-bottom: 16px; background: var(--primary); }
+        .page { min-height: 100vh; margin-left: 238px; }
+        header { padding: 29px 38px; border-bottom: 1px solid var(--border); background: var(--card); }
+        header h1 { margin: 0 0 7px; font-size: 25px; }
+        header p { margin: 0; color: var(--muted); font-size: 12px; }
+        main { max-width: 1400px; margin: auto; padding: 34px 38px; }
+        .intro { margin-bottom: 26px; }
+        .intro h2 { margin: 0 0 8px; font-size: 22px; }
+        .intro p { margin: 0; color: var(--muted); line-height: 1.6; }
+        .booking-card { overflow: hidden; border: 1px solid var(--border); border-radius: 7px; background: var(--card); }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 15px 16px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        th { background: #f0f1ed; color: var(--muted); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+        tbody tr:last-child td { border-bottom: 0; }
+        .status { display: inline-block; padding: 6px 9px; border-radius: 999px; background: #eef0eb; font-size: 11px; text-transform: capitalize; }
+        .status-reserved { background: #edf4d2; }
+        .status-occupied { background: #e3eef4; }
+        .status-completed { background: #e8e9e7; }
+        .status-cancelled { background: #f7e7e4; }
+        .empty { padding: 42px 24px; border: 1px solid var(--border); border-radius: 7px; background: var(--card); text-align: center; }
+        .empty h2 { margin: 0 0 9px; font-size: 19px; }
+        .empty p { margin: 0 0 20px; color: var(--muted); }
+        .button { display: inline-block; padding: 12px 17px; border-radius: 4px; background: var(--primary); font-weight: 600; }
+        @media (max-width: 760px) {
+            .side-panel { position: static; width: auto; padding: 18px; }
+            .nav-label { margin: 24px 10px 10px; }
+            .side-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .side-bottom { display: none; }
+            .page { margin-left: 0; }
+            header { padding: 22px 20px; }
+            main { padding: 25px 20px; }
+            .booking-card { overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="side-panel">
+        <a class="brand" href="/"><span class="brand-symbol">P</span>PARKEASE<span class="brand-dot">.</span></a>
+        <div class="nav-label">Your parking, sorted</div>
+        <nav class="side-nav" aria-label="Main navigation">
+            <a href="/user-dashboard">↗ &nbsp; Home</a>
+            <a href="/my-bookings.html" class="active" aria-current="page">▤ &nbsp; My Bookings</a>
+            <a href="/user/logout">↪ &nbsp; Logout</a>
+            <a href="/mall.html">▦ &nbsp; Staff &amp; admin</a>
+        </nav>
+        <div class="side-bottom"><div class="mini-rule"></div><strong>A space before you arrive.</strong><p>Malls Slot Parking Reservation</p></div>
+    </aside>
+    <div class="page">
+        <header>
+            <h1>My Bookings</h1>
+            <p>Your parking reservations</p>
+        </header>
+        <main>
+            <div class="intro">
+                <h2>Reservation history</h2>
+                <p>View the details and current status of your parking bookings.</p>
+            </div>
+            {% if bookings %}
+            <div class="booking-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mall</th>
+                            <th>Slot</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Vehicle</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.mall_name }}</td>
+                            <td>{{ booking.slot_number }}</td>
+                            <td>{{ booking.parking_date }}</td>
+                            <td>{{ booking.start_time }}–{{ booking.end_time }}</td>
+                            <td>{{ booking.vehicle_type.replace('_', ' ')|title }}</td>
+                            <td><span class="status status-{{ booking.status }}">{{ booking.status }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <section class="empty">
+                <h2>No bookings yet</h2>
+                <p>Your reservations will appear here after you book a parking slot.</p>
+                <a class="button" href="/user-dashboard">Browse malls</a>
+            </section>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>
