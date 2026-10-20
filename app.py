@@ -136,20 +136,12 @@ def evaluate_parking_gate(vehicle_type, slot_type, slot_vehicle_type, supports_b
 # =========================
 
 def get_db_connection():
-    required_settings = ("DB_HOST", "DB_USER", "DB_PASSWORD", "DB_NAME")
-    missing_settings = [name for name in required_settings if not os.environ.get(name)]
-    if missing_settings:
-        raise RuntimeError(
-            "Missing required database environment variables: "
-            + ", ".join(missing_settings)
-        )
-
     connection_options = {
-        "host": os.environ["DB_HOST"],
-        "port": int(os.environ.get("DB_PORT", "3306")),
-        "user": os.environ["DB_USER"],
-        "password": os.environ["DB_PASSWORD"],
-        "database": os.environ["DB_NAME"],
+        "host": "mysql-21f047be-arslogamithra-ded6.l.aivencloud.com",
+        "port": 12429,
+        "user": "avnadmin",
+        "password": "AVNS_iOgqZAwxlbihn9ceFcE",
+        "database": "defaultdb",
         "cursorclass": pymysql.cursors.DictCursor,
     }
     ssl_ca = os.environ.get("DB_SSL_CA")
